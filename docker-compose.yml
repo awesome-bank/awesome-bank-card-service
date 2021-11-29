@@ -3,6 +3,25 @@ services:
   card-service:
     build: .
     environment:
-      SPRING_PROFILES_ACTIVE: local
+      SPRING_PROFILES_ACTIVE: docker
     ports:
       - "8081:8081"
+    networks:
+      - vksviit-network
+    depends_on:
+      - card-db
+
+  card-db:
+    image: mysql:8
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: cards
+      MYSQL_USER: card_user
+      MYSQL_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3606:3306"
+    networks:
+      - vksviit-network
+networks:
+  vksviit-network: null
